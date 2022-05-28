@@ -4,7 +4,9 @@ namespace _6umpukc_;
 
 use Bitrix\Main\Web\Json;
 
-// ������ ������������ ����������
+
+//NOTE По списку используемых расширений собирает подключаемые js и css
+//TODO!!! вынести эту настройку в .settings_ext.php 
 $extList = [
 	'ui.buttons',
 	'ui.forms',
@@ -13,9 +15,9 @@ $extList = [
 
 $jsList = [
 	// default core.js
-	'/main/core/core.js' => 1,
-	'/main/core/core_ajax.js' => 1,
-	'/main/core/core_promise.js' => 1,
+	'/bitrix/js/main/core/core.js' => 1,
+	'/bitrix/js/main/core/core_ajax.js' => 1,
+	'/bitrix/js/main/core/core_promise.js' => 1,
 ];
 $cssList = [
 ];
