@@ -1,31 +1,36 @@
 <?php
 
+//NOTE ÐŸÐ¾ ÑÐ¿Ð¸ÑÐºÑƒ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÐ¼Ñ‹Ñ… Ñ€Ð°ÑÑˆÐ¸Ñ€ÐµÐ½Ð¸Ð¹ ÑÐ¾Ð±Ð¸Ñ€Ð°ÐµÑ‚ Ð¿Ð¾Ð´ÐºÐ»ÑŽÑ‡Ð°ÐµÐ¼Ñ‹Ðµ js Ð¸ css
+
 namespace _6umpukc_;
 
 use Bitrix\Main\Web\Json;
+use Bitrix\Main\Config\Configuration;
 
-// ñïèñîê èñïîëüçóåìûõ ðàñøèðåíèé
-$extList = [
-	'ui.buttons',
-	'ui.forms',
-	//'main.parambag',
-];
+$extList = Configuration::getValue('ext_build_list');
 
 $jsList = [
 	// default core.js
-	'/main/core/core.js' => 1,
-	'/main/core/core_ajax.js' => 1,
-	'/main/core/core_promise.js' => 1,
+	'/bitrix/js/main/core/core.js' => 1,
+	'/bitrix/js/main/core/core_ajax.js' => 1,
+	'/bitrix/js/main/core/core_promise.js' => 1,
 ];
 $cssList = [
 ];
+
+if (php_sapi_name() === 'cli')
+{
+	$_SERVER['DOCUMENT_ROOT'] = dirname(dirname(__DIR__));
+	define('BX_BUFFER_USED', true);
+	require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/cli/bootstrap.php';
+}
 
 function buildExtensionAssets($extList, &$jsList, &$cssList)
 {
 	$bitrixJsPrefix = '/bitrix/js/';
 	$bitrixJsDir = $_SERVER['DOCUMENT_ROOT'] . $bitrixJsPrefix;
 
-	foreach ($extList as $ext)
+	foreach ($extList as $ext => $type)
 	{
 		if (strpos($ext, 'main.core') !== false)
 		{
@@ -99,6 +104,5 @@ function buildExtensionsJson($jsList, $cssList)
 
 buildExtensionAssets($extList, $jsList, $cssList);
 
-echo "\n\n" . buildExtensionsHtml($jsList, $cssList) . "\n\n";
-
-echo "\n\n" . buildExtensionsJson($jsList, $cssList) . "\n\n";
+file_put_contents(__DIR__ . '/.assets.json', buildExtensionsJson($jsList, $cssList));
+file_put_contents(__DIR__ . '/.assets.html', buildExtensionsHtml($jsList, $cssList));
