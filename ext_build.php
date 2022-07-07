@@ -1,12 +1,11 @@
 <?php
 
+//NOTE По списку используемых расширений собирает подключаемые js и css
+
 namespace _6umpukc_;
 
 use Bitrix\Main\Web\Json;
 
-
-//NOTE По списку используемых расширений собирает подключаемые js и css
-//TODO!!! вынести эту настройку в .settings_ext.php 
 $extList = [
 	'ui.buttons',
 	'ui.forms',
@@ -21,6 +20,15 @@ $jsList = [
 ];
 $cssList = [
 ];
+
+if (php_sapi_name() === 'cli')
+{
+	$_SERVER["DOCUMENT_ROOT"] = dirname(__DIR__);
+
+	define('BX_BUFFER_USED', true);
+
+	require $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/cli/bootstrap.php';
+}
 
 function buildExtensionAssets($extList, &$jsList, &$cssList)
 {
