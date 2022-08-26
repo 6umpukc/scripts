@@ -56,9 +56,6 @@ function copyLangFolder($name, $srcLang, $destLang, $rewrite = false)
 {
 	$dest = dirname($name) . DIRECTORY_SEPARATOR . $destLang;
 	echo 'Copy files from ' . $name . "\n\t" . ' to ' . $dest . " ...\n";
-	return;
-
-	//TODO!!! check folder
 	CopyDirFiles($name, $dest, $rewrite, true);
 };
 
